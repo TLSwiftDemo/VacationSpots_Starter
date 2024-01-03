@@ -39,10 +39,10 @@ class SpotInfoViewController: UIViewController {
 
   var shouldHideWeatherInfoSetting: Bool {
     get {
-      return NSUserDefaults.standardUserDefaults().boolForKey("shouldHideWeatherInfo")
+        return UserDefaults.standard.bool(forKey: "shouldHideWeatherInfo")
     }
     set {
-      NSUserDefaults.standardUserDefaults().setBool(newValue, forKey: "shouldHideWeatherInfo")
+        UserDefaults.standard.set(newValue, forKey: "shouldHideWeatherInfo")
     }
   }
 
@@ -51,33 +51,33 @@ class SpotInfoViewController: UIViewController {
 
     // Clear background colors from labels and buttons
     for view in backgroundColoredViews {
-      view.backgroundColor = UIColor.clearColor()
+      view.backgroundColor = UIColor.clear
     }
 
     // Set the kerning to 1 to increase spacing between letters
-    headingLabels.forEach { $0.attributedText = NSAttributedString(string: $0.text!, attributes: [NSKernAttributeName: 1]) }
+      headingLabels.forEach { $0.attributedText = NSAttributedString(string: $0.text!, attributes: [NSAttributedString.Key.kern: 1]) }
 
     title = vacationSpot.name
     
     whyVisitLabel.text = vacationSpot.whyVisit
     whatToSeeLabel.text = vacationSpot.whatToSee
     weatherInfoLabel.text = vacationSpot.weatherInfo
-    userRatingLabel.text = String(count: vacationSpot.userRating, repeatedValue: Character("★"))
+    userRatingLabel.text = String(repeating: Character("★"), count: vacationSpot.userRating)
 
     updateWeatherInfoViews(hideWeatherInfo: shouldHideWeatherInfoSetting, animated: false)
   }
 
-  override func viewWillAppear(animated: Bool) {
-    super.viewWillAppear(animated)
-
-    let currentUserRating = NSUserDefaults.standardUserDefaults().integerForKey("currentUserRating-\(vacationSpot.identifier)")
-
-    if currentUserRating > 0 {
-      submitRatingButton.setTitle("Update Rating (\(currentUserRating))", forState: .Normal)
-    } else {
-      submitRatingButton.setTitle("Submit Rating", forState: .Normal)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let currentUserRating = UserDefaults.standard.integer(forKey: "currentUserRating-\(vacationSpot.identifier)")
+        
+        if currentUserRating > 0 {
+            submitRatingButton.setTitle("Update Rating (\(currentUserRating))", for: .normal)
+        } else {
+            submitRatingButton.setTitle("Submit Rating", for: .normal)
+        }
     }
-  }
 
   @IBAction func weatherHideOrShowButtonTapped(sender: UIButton) {
     let shouldHideWeatherInfo = sender.titleLabel!.text! == "Hide"
@@ -87,37 +87,37 @@ class SpotInfoViewController: UIViewController {
 
   func updateWeatherInfoViews(hideWeatherInfo shouldHideWeatherInfo: Bool, animated: Bool) {
     let newButtonTitle = shouldHideWeatherInfo ? "Show" : "Hide"
-    weatherHideOrShowButton.setTitle(newButtonTitle, forState: .Normal)
+      weatherHideOrShowButton.setTitle(newButtonTitle, for: .normal)
 
     // TODO: Animate when animated == true
    // weatherInfoLabel.hidden = shouldHideWeatherInfo
     
     if animated {
-        UIView.animateWithDuration(0.3) {
-            self.weatherInfoLabel.hidden = shouldHideWeatherInfo
+        UIView.animate(withDuration: 0.3) {
+            self.weatherInfoLabel.isHidden = shouldHideWeatherInfo
         }
     } else {
-        weatherInfoLabel.hidden = shouldHideWeatherInfo
+        weatherInfoLabel.isHidden = shouldHideWeatherInfo
     }
   }
 
-  @IBAction func wikipediaButtonTapped(sender: UIButton) {
-    let safariVC = SFSafariViewController(URL: vacationSpot.wikipediaURL)
+  @IBAction func wikipediaButtonTapped(_ sender: UIButton) {
+      let safariVC = SFSafariViewController(url: vacationSpot.wikipediaURL as URL)
     safariVC.delegate = self
-    presentViewController(safariVC, animated: true, completion: nil)
+      present(safariVC, animated: true, completion: nil)
   }
 
-  override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     switch segue.identifier! {
     case "presentMapViewController":
-      guard let navigationController = segue.destinationViewController as? UINavigationController,
+        guard let navigationController = segue.destination as? UINavigationController,
         let mapViewController = navigationController.topViewController as? MapViewController else {
           fatalError("Unexpected view hierarchy")
       }
       mapViewController.locationToShow = vacationSpot.coordinate
       mapViewController.title = vacationSpot.name
     case "presentRatingViewController":
-      guard let navigationController = segue.destinationViewController as? UINavigationController,
+        guard let navigationController = segue.destination as? UINavigationController,
         let ratingViewController = navigationController.topViewController as? RatingViewController else {
           fatalError("Unexpected view hierarchy")
       }
@@ -131,7 +131,7 @@ class SpotInfoViewController: UIViewController {
 // MARK: - SFSafariViewControllerDelegate
 
 extension SpotInfoViewController: SFSafariViewControllerDelegate {
-  func safariViewControllerDidFinish(controller: SFSafariViewController) {
-    controller.dismissViewControllerAnimated(true, completion: nil)
+    private func safariViewControllerDidFinish(controller: SFSafariViewController) {
+      controller.dismiss(animated: true, completion: nil)
   }
 }

@@ -37,18 +37,18 @@ class VacationSpotCell: UITableViewCell {
 
     // 2
     let topConstraint = layoutGuide.topAnchor
-      .constraintEqualToAnchor(nameLabel.topAnchor)
+          .constraint(equalTo: nameLabel.topAnchor)
 
     // 3
     let bottomConstraint = layoutGuide.bottomAnchor
-      .constraintEqualToAnchor(locationNameLabel.bottomAnchor)
+          .constraint(equalTo: locationNameLabel.bottomAnchor)
 
     // 4
     let centeringConstraint = layoutGuide.centerYAnchor
-      .constraintEqualToAnchor(contentView.centerYAnchor)
+          .constraint(equalTo: contentView.centerYAnchor)
 
     // 5
-    NSLayoutConstraint.activateConstraints(
+      NSLayoutConstraint.activate(
       [topConstraint, bottomConstraint, centeringConstraint])
   }
 }

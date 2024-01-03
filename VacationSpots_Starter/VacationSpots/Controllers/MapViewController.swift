@@ -32,9 +32,9 @@ class MapViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    mapView.setCenterCoordinate(locationToShow, animated: true)
+      mapView.setCenter(locationToShow, animated: true)
 
-    let zoomRegion = MKCoordinateRegionMakeWithDistance(locationToShow, 15000, 15000)
+      let zoomRegion = MKCoordinateRegion(center: locationToShow, latitudinalMeters: 15000, longitudinalMeters: 15000)
     mapView.setRegion(zoomRegion, animated: true)
 
     let annotation = MKPointAnnotation()
@@ -43,6 +43,6 @@ class MapViewController: UIViewController {
   }
 
   @IBAction func doneButtonTapped(sender: UIBarButtonItem) {
-    dismissViewControllerAnimated(true, completion: nil)
+      dismiss(animated: true, completion: nil)
   }
 }

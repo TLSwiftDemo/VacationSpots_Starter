@@ -27,13 +27,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
 
-  func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    private func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     setApplicationColorTheme()
     return true
   }
 
   func setApplicationColorTheme() {
-    let tealColor = RGB(79, 183, 193)
+      let tealColor = RGB(r: 79, 183, 193)
 
     // Application tintColor
     window?.tintColor = tealColor
@@ -42,10 +42,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     UINavigationBar.appearance().barTintColor = tealColor
 
     // Make the back button white (instead of the global tintColor)
-    UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+    UINavigationBar.appearance().tintColor = UIColor.white
 
     // Make the text in the navigation bar white
-    UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+      UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
   }
 
   private func RGB(r: CGFloat, _ g: CGFloat, _ b: CGFloat) -> UIColor {
