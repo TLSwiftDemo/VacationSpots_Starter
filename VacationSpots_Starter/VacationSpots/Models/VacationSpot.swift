@@ -41,12 +41,12 @@ struct VacationSpot {
 extension VacationSpot {
 
   static func loadAllVacationSpots() -> [VacationSpot] {
-    return loadVacationSpotsFromPlistNamed("vacation_spots")
+      return loadVacationSpotsFromPlistNamed(plistName: "vacation_spots")
   }
 
   private static func loadVacationSpotsFromPlistNamed(plistName: String) -> [VacationSpot] {
     guard
-      let path = NSBundle.mainBundle().pathForResource(plistName, ofType: "plist"),
+        let path = Bundle.main.path(forResource: plistName, ofType: "plist"),
       let dictArray = NSArray(contentsOfFile: path) as? [[String : AnyObject]]
       else {
         fatalError("An error occurred while reading \(plistName).plist")

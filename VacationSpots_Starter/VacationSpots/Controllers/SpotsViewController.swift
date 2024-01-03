@@ -37,12 +37,13 @@ class SpotsViewController: UITableViewController {
 
   // MARK: - UITableViewDataSource
 
-  override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return vacationSpots.count
   }
 
-  override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCellWithIdentifier("VacationSpotCell", forIndexPath: indexPath) as! VacationSpotCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "VacationSpotCell", for: indexPath) as! VacationSpotCell
     let vacationSpot = vacationSpots[indexPath.row]
     cell.nameLabel.text = vacationSpot.name
     cell.locationNameLabel.text = vacationSpot.locationName
@@ -52,15 +53,13 @@ class SpotsViewController: UITableViewController {
   }
 
   // MARK: - Navigation
-
-  override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    guard let selectedCell = sender as? UITableViewCell, selectedRowIndex = tableView.indexPathForCell(selectedCell)?.row
-      where segue.identifier == "showSpotInfoViewController" else {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+      guard let selectedCell = sender as? UITableViewCell, let selectedRowIndex = tableView.indexPath(for: selectedCell)?.row, segue.identifier == "showSpotInfoViewController" else {
         fatalError("sender is not a UITableViewCell or was not found in the tableView, or segue.identifier is incorrect")
     }
 
     let vacationSpot = vacationSpots[selectedRowIndex]
-    let detailViewController = segue.destinationViewController as! SpotInfoViewController
+      let detailViewController = segue.destination as! SpotInfoViewController
     detailViewController.vacationSpot = vacationSpot
   }
 }

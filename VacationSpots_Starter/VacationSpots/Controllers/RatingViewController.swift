@@ -34,10 +34,10 @@ class RatingViewController: UIViewController {
 
   var currentUserRating: Int {
     get {
-      return NSUserDefaults.standardUserDefaults().integerForKey("currentUserRating-\(vacationSpot.identifier)")
+        return UserDefaults.standard.integer(forKey: "currentUserRating-\(vacationSpot.identifier)")
     }
     set {
-      NSUserDefaults.standardUserDefaults().setInteger(newValue, forKey: "currentUserRating-\(vacationSpot.identifier)")
+        UserDefaults.standard.set(newValue, forKey: "currentUserRating-\(vacationSpot.identifier)")
     }
   }
 
@@ -50,21 +50,21 @@ class RatingViewController: UIViewController {
 
     // Clear storyboard background colors
     for button in ratingButtons {
-      button.backgroundColor = UIColor.clearColor()
+        button.backgroundColor = UIColor.clear
     }
 
     questionLabel.text = "How would you rate \(vacationSpot.name)?"
 
-    showStarCount(currentUserRating, animated: false)
+      showStarCount(totalStarCount: currentUserRating, animated: false)
 
-    deleteRatingButton.hidden = currentUserRating == 0
+      deleteRatingButton.isHidden = currentUserRating == 0
 
     if currentUserRating > 0 {
-      submitRatingButton.setTitle("Update Your Rating", forState: .Normal)
+        submitRatingButton.setTitle("Update Your Rating", for: .normal)
       let index = currentUserRating - 1
       let titleOfButtonToSelect = ratingButtonTitles[index]
       for ratingButton in ratingButtons {
-        ratingButton.selected = ratingButton.titleLabel!.text! == titleOfButtonToSelect
+          ratingButton.isSelected = ratingButton.titleLabel!.text! == titleOfButtonToSelect
       }
     }
   }
@@ -72,17 +72,17 @@ class RatingViewController: UIViewController {
   // MARK: - Actions
 
   @IBAction func cancelButtonTapped(sender: UIBarButtonItem) {
-    dismissViewControllerAnimated(true, completion: nil)
+      dismiss(animated: true, completion: nil)
   }
 
   @IBAction func submitRatingTapped() {
     currentUserRating = starsStackView.arrangedSubviews.count
-    dismissViewControllerAnimated(true, completion: nil)
+      dismiss(animated: true, completion: nil)
   }
 
   @IBAction func deleteRatingTapped() {
     currentUserRating = 0
-    dismissViewControllerAnimated(true, completion: nil)
+      dismiss(animated: true, completion: nil)
   }
 
   @IBAction func ratingButtonTapped(sender: UIButton) {
@@ -90,17 +90,17 @@ class RatingViewController: UIViewController {
 
     // Select the tapped button and unselect others
     for ratingButton in ratingButtons {
-      ratingButton.selected = ratingButton == sender
+        ratingButton.isSelected = ratingButton == sender
     }
 
-    let rating = ratingForButtonTitle(buttonTitle)
-    showStarCount(rating)
+      let rating = ratingForButtonTitle(buttonTitle: buttonTitle)
+      showStarCount(totalStarCount: rating)
   }
 
   // MARK: - Helper Methods
 
   func ratingForButtonTitle(buttonTitle: String) -> Int {
-    guard let index = ratingButtonTitles.indexOf(buttonTitle) else {
+      guard let index = ratingButtonTitles.firstIndex(of: buttonTitle) else {
       fatalError("Rating not found for buttonTitle: \(buttonTitle)")
     }
     return index + 1
@@ -112,7 +112,7 @@ class RatingViewController: UIViewController {
     if starsToAdd > 0 {
       for _ in 1...starsToAdd {
         let starImageView = UIImageView(image: UIImage(named: "rating_star"))
-        starImageView.contentMode = .ScaleAspectFit
+          starImageView.contentMode = .scaleAspectFit
         starImageView.frame.origin = CGPoint(x: starsStackView.frame.width, y: 0) // animate in from the right
         starsStackView.addArrangedSubview(starImageView)
       }
@@ -126,7 +126,7 @@ class RatingViewController: UIViewController {
     }
 
     if animated {
-      UIView.animateWithDuration(0.25) {
+        UIView.animate(withDuration: 0.25) {
         self.starsStackView.layoutIfNeeded()
       }
     }
